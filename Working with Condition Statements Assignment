@@ -1,0 +1,61 @@
+data = [
+    1121, "Jackie Grainger", 22.22,
+    1122, "Jignesh Thrakkar", 25.25,
+    1127, "Dion Green", 28.75, False,
+    24.32, 1132, "Jacob Gerber",
+    "Sarah Sanderson", 23.45, 1137, True,
+    "Brandon Heck", 1138, 25.84, True,
+    1152, "David Toma", 22.65,
+    23.75, 1157, "Charles King", False,
+    "Jackie Grainger", 1121, 22.22, False,
+    22.65, 1152, "David Toma"
+]
+
+# Separate data into the lists
+employee_numbers = list({item for item in data if isinstance(item, int)})
+employee_names = list({item for item in data if isinstance(item, str)})
+salaries = list({item for item in data if isinstance(item, float)})
+
+# Total hourly rate with benefits
+total_hourly_rate = [round(sal * 1.3, 2) for sal in salaries]
+
+# Budget check
+max_rate = max(total_hourly_rate)
+if max_rate > 37.30:
+    print("/////////Someone's salary may be a budget concern.///////")
+# Underpaid salaries
+underpaid_salaries = [rate for rate in total_hourly_rate if 28.15 <= rate <= 30.65]
+
+# Raises based on tiers
+company_raises = []
+for salary in salaries:
+    if 22 <= salary < 24:
+        raise_amt = salary * 1.05
+    elif 24 <= salary < 26:
+        raise_amt = salary * 1.04
+    elif 26 <= salary < 28:
+        raise_amt = salary * 1.03
+    else:
+        raise_amt = salary * 1.02
+    company_raises.append(round(raise_amt, 2))
+
+# Complex condition: base > 24, underpaid, below average, low raise
+average_total_rate = sum(total_hourly_rate) / len(total_hourly_rate)
+for i, salary in enumerate(salaries):
+    raise_factor = company_raises[i] / salary
+    total_rate = round(salary * 1.3, 2)
+    if (
+        salary > 24 and
+        total_rate in underpaid_salaries and
+        total_rate < average_total_rate and
+        raise_factor <= 1.04
+    ):
+        print(f"{salary} may need reevaluation.")
+
+# Final Output
+print("Employee Numbers:", employee_numbers)
+print("Employee Names:", employee_names)
+print("Salaries:", salaries)
+print("Total Hourly Rate:", total_hourly_rate)
+print("Underpaid Salaries:", underpaid_salaries)
+print("Company Raises:", company_raises)
